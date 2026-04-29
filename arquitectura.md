@@ -1,42 +1,44 @@
-# Arquitectura de la Solución BI - Adventure Works
+flowchart LR
+    %% Configuración de Orientación y Espaciado
+    direction LR
 
-A continuación se presenta el código para generar el diagrama de arquitectura. Está escrito en formato **Mermaid**, el cual es un estándar muy popular. Puedes copiar el bloque de código a continuación y pegarlo en páginas como [Mermaid Live Editor](https://mermaid.live/) o usarlo directamente en Notion, GitHub, o Markdown.
-
-```mermaid
-graph LR
-    %% Definición de Estilos
-    classDef database fill:#f9f,stroke:#333,stroke-width:2px;
-    classDef process fill:#bbf,stroke:#333,stroke-width:2px;
-    classDef bi fill:#ff9,stroke:#333,stroke-width:2px;
-
-    subgraph "Capa de Origen (Source)"
-        A[(Base de Datos Transaccional<br/>SQL Server - AdventureWorks)]:::database
+    subgraph Source ["1. Capa de Origen (OLTP)"]
+        A[("BD Transaccional<br/>AdventureWorks<br/>(SQL Server)")]
     end
-    
-    subgraph "Capa de Integración (Proceso ETL)"
-        B[Extracción de Datos]:::process
-        C[Transformación<br/>Limpieza y Modelado]:::process
-        D[Carga de Datos]:::process
+
+    subgraph ETL ["2. Integración (Proceso ETL)"]
+        direction LR
+        B["Extracción"] 
+        C["Transformación<br/>y Limpieza"] 
+        D["Carga de Datos"]
         
-        B --> C
-        C --> D
-    end
-    
-    subgraph "Capa de Almacenamiento (Data Warehouse)"
-        E[(Base de Datos OLAP<br/>Modelo Estrella / Copo de Nieve)]:::database
-    end
-    
-    subgraph "Capa de Presentación (BI & Reportabilidad)"
-        F[Power BI<br/>Perspectiva: Clientes]:::bi
-        G[Power BI<br/>Perspectiva: Procesos/Producción]:::bi
-        H[Power BI<br/>Perspectiva: Ventas]:::bi
+        B --> C --> D
     end
 
-    %% Conexiones principales
-    A ==>|Lectura de Datos| B
-    D ==>|Escritura de Datos| E
-    E ==>|Consulta (DirectQuery / Import)| F
-    E ==>|Consulta (DirectQuery / Import)| G
-    E ==>|Consulta (DirectQuery / Import)| H
+    subgraph DW ["3. Almacenamiento (Data Warehouse)"]
+        E[("Base de Datos OLAP<br/>Modelo Estrella /<br/>Copo de Nieve")]
+    end
 
-```
+    subgraph BI ["4. Presentación (Power BI)"]
+        F["📊 Perspectiva: Clientes<br/>(Demografía y Retención)"]
+        G["⚙️ Perspectiva: Procesos<br/>(Inventario y Manufactura)"]
+        H["💰 Perspectiva: Ventas<br/>(Ingresos y Rendimiento)"]
+    end
+
+    %% Conexiones Principales con etiquetas claras
+    A ===|Lectura| B
+    D ===|Poblamiento DW| E
+    
+    %% Conexiones de Salida
+    E -.-> F
+    E -.-> G
+    E -.-> H
+
+    %% Estilos para mejorar legibilidad y evitar solapamientos
+    classDef database fill:#e1f5fe,stroke:#0288d1,stroke-width:2px,color:#000
+    classDef process fill:#fff3e0,stroke:#f57c00,stroke-width:2px,color:#000
+    classDef bi fill:#e8f5e9,stroke:#388e3c,stroke-width:2px,color:#000
+
+    class A,E database
+    class B,C,D process
+    class F,G,H bi
