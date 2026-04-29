@@ -1,0 +1,14 @@
+# Ignorar archivos muy pesados
+script.sql
+
+# Ignorar otros archivos de base de datos si los hubiera
+*.bak
+*.mdf
+*.ldf
+
+# Ignorar archivos generados por scripts python
+__pycache__/
+*.pyc
+pdf_text_utf8.txt
+pdf_text.txt
+read_pdf.py
