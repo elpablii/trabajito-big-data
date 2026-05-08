@@ -40,7 +40,6 @@ Y presionan **'Connect'**. Si les sale un coso de "Trust no sé qué"
 docker exec -it adventure_works_db /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "Password_123!" -C -i /var/opt/mssql/data/script.sql
 ```
 
-Y te aguantas mas o menos 10 minutos a que termine por gil 
 
 5. *Refresh*
 

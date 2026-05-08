@@ -1,0 +1,10 @@
+Hacer la base de datos (repositorio de datos (data warehouse) con las tablas que se van a usar en los reportes definidos a partir del script.sql que el profe pasó. Se van a poblar las tablas con ETL a partir del script entregado por el profe. Los cubos de datos OLAP ya no van, así que se van a amarrar los reportes o dashboards en power BI con el repositorio de datos (data warehouse).
+
+
+Aquí tienes el plan de acción actualizado para la Entrega 2 (viernes 15 de mayo):  
+
+1. Análisis y Preparación del Repositorio (Data Warehouse): Dado que ya no usaremos cubos, el Data Warehouse (DW) será el corazón de la reportabilidad.  Ejecución del script.sql: Crear las tablas del repositorio en tu instancia de SQL Server (en el contenedor Docker) siguiendo la estructura entregada por el profesor.  Mapeo de Datos: Identificar qué tablas de la base transaccional (AdventureWorks) alimentan cada tabla del repositorio definido en el script.  
+
+2. Implementación del Proceso ETL: El foco aquí es la carga final y la integridad de los datos.  Carga al Final: Configurar el flujo para que la inserción de datos en el repositorio ocurra como el paso final del proceso.  Validación de Transacciones: Implementar lógica (como BEGIN TRANSACTION y COMMIT/ROLLBACK) para asegurar que, si falla la carga de una tabla, no se ensucie el repositorio.  Limpieza Básica: Aunque el script mande, asegúrate de que las transformaciones (formatos de fecha, manejo de nulos) mantengan la calidad necesaria para los reportes.  
+
+3. Conexión y Diseño Final de Reportes (Power BI): Ahora los dashboards se "amarran" directamente al repositorio.  Conexión Directa: Configurar el origen de datos en Power BI para que apunte a las tablas del DW (usando el modelo de datos que resulte del script.sql).  Estructura de las 3 Perspectivas:Ventas: 5 reportes (ej. ventas por región, margen de utilidad).  Clientes: 5 reportes (ej. tasa de retención, segmentación demográfica).  Procesos: 5 reportes (ej. volumen de producción, eficiencia de líneas).  Diseño Final: Ajustar visualmente los dashboards para que sean ejecutivos y funcionales.  

@@ -1,0 +1,20 @@
+{
+    "mssql.connections": [
+        {
+            "server": "localhost",
+            "database": "",
+            "user": "sa",
+            "password": "",
+            "profileName": "Trabajito Big Data",
+            "authenticationType": "SqlLogin",
+            "emptyPasswordInput": false,
+            "savePassword": true,
+            "groupId": "ROOT",
+            "id": "ddb4aa57-bd27-4c6c-b619-889fcc361e3a",
+            "profileSource": 0,
+            "encrypt": "Mandatory",
+            "trustServerCertificate": true,
+            "containerName": "adventure_works_db"
+        }
+    ]
+}
