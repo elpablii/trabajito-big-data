@@ -117,3 +117,38 @@ CREATE TABLE Repositorio.FactProduccion (
     TiempoFabricacionDias INT
 );
 ```
+
+# PROCESO ETL
+
+Los scripts ETL están en la carpeta `etl/` y poblan el Data Warehouse desde la BD transaccional AdventureWorks.
+
+## Archivos ETL
+
+| Archivo | Tabla destino | Fuentes |
+|---|---|---|
+| `01_ETL_DimTiempo.sql` | `DimTiempo` | `Sales.SalesOrderHeader` |
+| `02_ETL_DimProducto.sql` | `DimProducto` | `Production.Product`, `ProductSubcategory`, `ProductCategory` |
+| `03_ETL_DimCliente.sql` | `DimCliente` | `Sales.Customer`, `Person.Person` |
+| `04_ETL_DimTerritorio.sql` | `DimTerritorio` | `Sales.SalesTerritory` |
+| `05_ETL_FactVentas.sql` | `FactVentas` | `Sales.SalesOrderHeader`, `SalesOrderDetail` |
+| `06_ETL_FactProduccion.sql` | `FactProduccion` | `Production.WorkOrder` |
+
+## Ejecución (opción recomendada: script maestro)
+
+Abre el archivo `etl/00_ETL_MASTER.sql` en VS Code con la extensión SQL Server y ejecútalo conectado al servidor `localhost`. Este orquestador corre todos los scripts en el orden correcto (dimensiones primero, hechos después) y al final muestra un resumen de filas cargadas por tabla.
+
+> **Requisito previo:** Tener el DW creado con el esquema `Repositorio` (paso anterior) y el contenedor Docker corriendo.
+
+## Ejecución individual (desde CMD / sqlcmd)
+
+```bash
+# Desde la carpeta etl/
+sqlcmd -S localhost -U sa -P "Password_123!" -C -d AdventureWorks_DW -i 00_ETL_MASTER.sql
+```
+
+## Características del ETL
+
+- **Carga incremental**: cada script verifica si el registro ya existe antes de insertar (evita duplicados en re-ejecuciones).
+- **Transacciones**: cada carga está envuelta en `BEGIN TRANSACTION / COMMIT / ROLLBACK` para garantizar integridad.
+- **Limpieza de datos**: manejo de nulos con `ISNULL`, construcción de nombres compuestos, y cálculo de `TiempoKey` estandarizado (`yyyyMMdd`).
+- **Orden de dependencias**: dimensiones → hechos (las FK del DW siempre se resuelven correctamente).
